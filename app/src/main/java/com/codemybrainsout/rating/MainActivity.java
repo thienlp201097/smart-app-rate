@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         final RatingDialog ratingDialog = new RatingDialog.Builder(this)
                 .session(2)
-                .date(1)
+                .date(2)
                 .ratingBarColor(R.color.yellow)
                 .playstoreUrl("https://play.google.com/store/apps")
                 .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {

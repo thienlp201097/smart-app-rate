@@ -312,14 +312,12 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             sharedpreferences.edit().putBoolean("firstrun", false).commit();
 
             if (currentTime != null){
-                sharedpreferences.edit().putString(DATE_FIRST, String.valueOf(currentTime));
+                sharedpreferences.edit().putString(DATE_FIRST, String.valueOf(currentTime)).commit();
             }
         }
 
-
         String currentDate = sharedpreferences.getString(DATE_FIRST, String.valueOf(currentTime));
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
-
 
         Date startDate = null;
         try {
