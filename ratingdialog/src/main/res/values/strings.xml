@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Rating Dialog</string>
-    <string name="rating_dialog_experience">How was your experience with us?</string>
+    <string name="rating_dialog_experience">We are working hard for a better user eperience.</string>
     <string name="rating_dialog_maybe_later">Maybe later</string>
     <string name="rating_dialog_never">Never</string>
     <string name="rating_dialog_feedback_title">Feedback</string>
