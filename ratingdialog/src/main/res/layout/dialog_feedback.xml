@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
+        android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
         android:background="@drawable/rounded_rectangle"
         android:orientation="vertical">
         <View
