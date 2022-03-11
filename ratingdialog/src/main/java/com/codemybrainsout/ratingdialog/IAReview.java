@@ -10,6 +10,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -40,7 +41,7 @@ public class IAReview {
     public void showIAReview(Activity context){
 
 
-         manager = ReviewManagerFactory.create(context);
+        manager = ReviewManagerFactory.create(context);
         Task<ReviewInfo> request = manager.requestReviewFlow();
         request.addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
@@ -55,6 +56,7 @@ public class IAReview {
 
             } else {
                 // There was some problem, log or handle the error code.
+                Toast.makeText(context, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
 
                 String reviewErrorCode = task.getException().toString();
             }
@@ -66,6 +68,7 @@ public class IAReview {
 //        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         BottomSheetDialog bottomSheerDialog = new BottomSheetDialog(activity, R.style.DialogStyle);
+
         bottomSheerDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -85,11 +88,10 @@ public class IAReview {
         View parentView = activity.getLayoutInflater().inflate(R.layout.dialog_feedback,null);
         bottomSheerDialog.setContentView(parentView);
         bottomSheerDialog.show();
-        TextInputLayout outlinedTextField = parentView.findViewById(R.id.outlinedTextField);
         TextView tvcount = parentView.findViewById(R.id.count);
         ImageView imglogo = parentView.findViewById(R.id.logo);
         TextView tvAppName = parentView.findViewById(R.id.tvAppName);
-        TextInputEditText body = parentView.findViewById(R.id.body);
+        EditText body = parentView.findViewById(R.id.body);
         RatingBar dialog_rating_rating_bar = parentView.findViewById(R.id.dialog_rating_rating_bar);
         dialog_rating_rating_bar.setRating(starnumber);
 //        body.requestFocus();
@@ -140,11 +142,12 @@ public class IAReview {
         });
 
         Button btnSubmit = parentView.findViewById(R.id.btnSubmit);
-                btnSubmit.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (body.getText().toString().length() <= 0){
-                    Toast.makeText(activity,"Feedback cannot be left blank",Toast.LENGTH_LONG).show();
+                    Toast.makeText(activity,"Feedback cannot be left blank", Toast.LENGTH_SHORT).show();
+
                     return;
                 }
                 bottomSheerDialog.dismiss();

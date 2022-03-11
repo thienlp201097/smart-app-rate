@@ -38,6 +38,8 @@ import java.util.Locale;
 public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingBarChangeListener, View.OnClickListener {
 
     private static final String SESSION_COUNT = "session_count";
+    private static final String RATE5 = "rate_5";
+    private static final String RATED = "rated";
     private static final String DATE_FIRST = "date_count";
     private static final String SHOW_NEVER = "show_never";
     private String MyPrefs = "RatingDialog";
@@ -50,10 +52,10 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
     private LinearLayout ratingButtons;
     Button btnRate;
     TextView btnLate;
-
     private float threshold;
     private int session;
     private int date;
+    private boolean ignoreRated = false;
     private boolean thresholdPassed = true;
     public int starnumber = 0;
 
@@ -65,6 +67,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         this.session = builder.session;
         this.threshold = builder.threshold;
         this.date = builder.date;
+        this.ignoreRated = builder.ignoreRated;
     }
 
 
@@ -118,20 +121,37 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         btnLate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                builder.maybeLaterCallback.onClick();
+                if (builder.isDismiss){
+                    dismiss();
+                }
             }
         });
 
         btnRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if (starnumber <= 3){
-                  dismiss();
-                  IAReview.getInstance().openDialogFeedback(context, builder.appName, builder.logo, builder.email, starnumber);
-              }else {
-                  dismiss();
-                  IAReview.getInstance().showIAReview(context);
-              }
+                if (starnumber <= 3){
+                    dismiss();
+                    IAReview.getInstance().openDialogFeedback(context, builder.appName, builder.logo, builder.email, starnumber);
+                }else {
+                    dismiss();
+                    sharedpreferences = context.getSharedPreferences(MyPrefs, Context.MODE_PRIVATE);
+                    if (sharedpreferences.getBoolean(RATE5, true)) {
+                        sharedpreferences.edit().putBoolean(RATE5, false).commit();
+                        IAReview.getInstance().showIAReview(context);
+                    }else {
+                        final String appPackageName = context.getPackageName(); // getPackageName() from Context or Activity object
+                        try {
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                        } catch (android.content.ActivityNotFoundException anfe) {
+                            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                        }
+                        sharedpreferences.edit().putBoolean(RATED, true).commit();
+                    }
+
+
+                }
             }
         });
         tvTitle.setText(builder.title);
@@ -169,7 +189,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 //        }
 
         Drawable d = context.getPackageManager().getApplicationIcon(context.getApplicationInfo());
-      //  ivIcon.setImageDrawable(builder.drawable != null ? builder.drawable : d);
+        //  ivIcon.setImageDrawable(builder.drawable != null ? builder.drawable : d);
 
         ratingBar.setOnRatingChangeListener(new BaseRatingBar.OnRatingChangeListener() {
             @Override
@@ -325,8 +345,9 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
     @Override
     public void show() {
-
-        if (checkIfSessionMatches(session)) {
+        sharedpreferences = context.getSharedPreferences(MyPrefs, Context.MODE_PRIVATE);
+        boolean isRated = sharedpreferences.getBoolean(RATED, false);
+        if ((checkIfSessionMatches(session)&&(!isRated))||ignoreRated) {
             super.show();
         }
     }
@@ -415,9 +436,11 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
         private final Activity context;
         private boolean isShowLate;
+        private boolean isDismiss;
         private int logo;
         private String appName;
         private String email;
+        private MaybeLaterCallback maybeLaterCallback;
         private String title, positiveText, negativeText, playstoreUrl, btnLate;
         private int positiveTextColor, negativeTextColor, titleTextColor, ratingBarColor, ratingBarBackgroundColor, feedBackTextColor;
         private int positiveBackgroundColor, negativeBackgroundColor;
@@ -430,6 +453,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         private int session = 1;
         private float threshold = 1;
         private int date = 1;
+        private boolean ignoreRated = false;
         public interface RatingThresholdClearedListener {
             void onThresholdCleared(RatingDialog ratingDialog, float rating, boolean thresholdCleared);
         }
@@ -482,6 +506,10 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             return this;
         }
 
+        public Builder ignoreRated(boolean ignoreRated) {
+            this.ignoreRated = ignoreRated;
+            return this;
+        }
         /*public Builder icon(int icon) {
             this.icon = icon;
             return this;
@@ -551,6 +579,10 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             this.isShowLate = isShowLate;
             return this;
         }
+        public Builder isClickLaterDismiss(boolean isDismiss) {
+            this.isDismiss = isDismiss;
+            return this;
+        }
 
         public Builder setNameApp(String appName) {
             this.appName = appName;
@@ -558,6 +590,11 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         }
         public Builder setEmail(String email) {
             this.email = email;
+            return this;
+        }
+
+        public Builder setOnlickMaybeLate(MaybeLaterCallback onlickMaybeLate) {
+            this.maybeLaterCallback = onlickMaybeLate;
             return this;
         }
 
