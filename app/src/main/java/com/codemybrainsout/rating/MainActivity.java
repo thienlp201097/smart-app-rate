@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.codemybrainsout.ratingdialog.MaybeLaterCallback;
+import com.codemybrainsout.ratingdialog.RateButtonCallback;
 import com.codemybrainsout.ratingdialog.RatingDialog;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 .setEmail("vapp.helpcenter@gmail.com")
                 .isShowButtonLater(true)
                 .isClickLaterDismiss(true)
+                .setOnlickRate(new RateButtonCallback() {
+                    @Override
+                    public void onClick(int rate) {
+                        Toast.makeText(MainActivity.this,"Rate" + String.valueOf(rate), Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .setTextButtonLater("Maybe Later")
                 .setOnlickMaybeLate(new MaybeLaterCallback() {
                     @Override
@@ -47,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this,"Feedback cannot be left blank", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .ignoreRated(true)
                 .ratingButtonColor(R.color.colorPrimary)
                 .build();
 

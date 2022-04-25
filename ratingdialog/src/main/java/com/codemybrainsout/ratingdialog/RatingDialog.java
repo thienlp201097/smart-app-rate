@@ -131,6 +131,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         btnRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                builder.rateButtonCallback.onClick(starnumber);
                 if (starnumber <= 3) {
                     dismiss();
                     IAReview.getInstance().openDialogFeedback(context, builder.appName, builder.logo, builder.email, starnumber);
@@ -443,6 +444,8 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         private String appName;
         private String email;
         private MaybeLaterCallback maybeLaterCallback;
+        private RateButtonCallback rateButtonCallback;
+
         private String title, positiveText, negativeText, playstoreUrl, btnLate;
         private int positiveTextColor, negativeTextColor, titleTextColor, ratingBarColor, ratingBarBackgroundColor, feedBackTextColor;
         private int positiveBackgroundColor, negativeBackgroundColor;
@@ -455,7 +458,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         private int session = 1;
         private float threshold = 1;
         private int date = 1;
-        private boolean ignoreRated = false;
+        private boolean ignoreRated = true;
 
         public interface RatingThresholdClearedListener {
             void onThresholdCleared(RatingDialog ratingDialog, float rating, boolean thresholdCleared);
@@ -600,6 +603,11 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
         public Builder setOnlickMaybeLate(MaybeLaterCallback onlickMaybeLate) {
             this.maybeLaterCallback = onlickMaybeLate;
+            return this;
+        }
+
+        public Builder setOnlickRate(RateButtonCallback onlickRate) {
+            this.rateButtonCallback = onlickRate;
             return this;
         }
 
