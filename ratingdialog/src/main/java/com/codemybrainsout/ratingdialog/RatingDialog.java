@@ -46,7 +46,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
     private SharedPreferences sharedpreferences;
     private Activity context;
     private Builder builder;
-    private TextView tvTitle,tvContent , tvNegative, tvPositive;
+    private TextView tvTitle, tvContent, tvNegative, tvPositive;
     private RotationRatingBar ratingBar;
     private ImageView ivIcon;
     private LinearLayout ratingButtons;
@@ -106,15 +106,15 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
             }
         });
-        if (builder.isShowLate){
+        if (builder.isShowLate) {
             btnLate.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             btnLate.setVisibility(View.GONE);
         }
 
-        if (builder.btnLate == null || builder.btnLate.equals("")){
+        if (builder.btnLate == null || builder.btnLate.equals("")) {
             btnLate.setText("Maybe Later");
-        }else {
+        } else {
             btnLate.setText(builder.btnLate);
         }
 
@@ -122,7 +122,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             @Override
             public void onClick(View v) {
                 builder.maybeLaterCallback.onClick();
-                if (builder.isDismiss){
+                if (builder.isDismiss) {
                     dismiss();
                 }
             }
@@ -131,16 +131,16 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         btnRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (starnumber <= 3){
+                if (starnumber <= 3) {
                     dismiss();
                     IAReview.getInstance().openDialogFeedback(context, builder.appName, builder.logo, builder.email, starnumber);
-                }else {
+                } else {
                     dismiss();
                     sharedpreferences = context.getSharedPreferences(MyPrefs, Context.MODE_PRIVATE);
                     if (sharedpreferences.getBoolean(RATE5, true)) {
                         sharedpreferences.edit().putBoolean(RATE5, false).commit();
                         IAReview.getInstance().showIAReview(context);
-                    }else {
+                    } else {
                         final String appPackageName = context.getPackageName(); // getPackageName() from Context or Activity object
                         try {
                             context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
@@ -196,7 +196,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             public void onRatingChange(BaseRatingBar ratingBar, float rating, boolean fromUser) {
                 int b = Math.round(rating);
                 starnumber = b;
-                switch (b){
+                switch (b) {
                     case 0:
                         tvTitle.setText("We are working hard for a better user eperience.");
                         tvContent.setText("We’d greatly appreciate if you can rate us.");
@@ -245,6 +245,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             tvNegative.setVisibility(View.GONE);
         }
     }
+
     @Override
     public void onClick(View view) {
 
@@ -339,7 +340,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         return ivIcon;
     }
 
-    public RotationRatingBar  getRatingBarView() {
+    public RotationRatingBar getRatingBarView() {
         return ratingBar;
     }
 
@@ -347,10 +348,11 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
     public void show() {
         sharedpreferences = context.getSharedPreferences(MyPrefs, Context.MODE_PRIVATE);
         boolean isRated = sharedpreferences.getBoolean(RATED, false);
-        if ((checkIfSessionMatches(session)&&(!isRated))||ignoreRated) {
+        if ((checkIfSessionMatches(session) && (!isRated)) || ignoreRated) {
             super.show();
         }
     }
+
     int differenceDate = 0;
 
     private boolean checkIfSessionMatches(int session) {
@@ -362,7 +364,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         if (sharedpreferences.getBoolean("firstrun", true)) {
             sharedpreferences.edit().putBoolean("firstrun", false).commit();
 
-            if (currentTime != null){
+            if (currentTime != null) {
                 sharedpreferences.edit().putString(DATE_FIRST, String.valueOf(currentTime)).commit();
             }
         }
@@ -389,10 +391,10 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(startDate !=null && endDate !=null){
-            differenceDate=
-                    ((int)((endDate.getTime()/(24*60*60*1000))
-                            -(int)(startDate.getTime()/(24*60*60*1000))));
+        if (startDate != null && endDate != null) {
+            differenceDate =
+                    ((int) ((endDate.getTime() / (24 * 60 * 60 * 1000))
+                            - (int) (startDate.getTime() / (24 * 60 * 60 * 1000))));
         }
 
         if (session == 1) {
@@ -454,6 +456,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         private float threshold = 1;
         private int date = 1;
         private boolean ignoreRated = false;
+
         public interface RatingThresholdClearedListener {
             void onThresholdCleared(RatingDialog ratingDialog, float rating, boolean thresholdCleared);
         }
@@ -489,7 +492,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         }
 
         public Builder date(int date) {
-            if (date > 0){
+            if (date > 0) {
                 date = date - 1;
             }
             this.date = date;
@@ -579,6 +582,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             this.isShowLate = isShowLate;
             return this;
         }
+
         public Builder isClickLaterDismiss(boolean isDismiss) {
             this.isDismiss = isDismiss;
             return this;
@@ -588,6 +592,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             this.appName = appName;
             return this;
         }
+
         public Builder setEmail(String email) {
             this.email = email;
             return this;

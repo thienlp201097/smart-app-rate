@@ -28,6 +28,7 @@ import com.google.android.play.core.tasks.Task;
 
 public class IAReview {
     private static volatile IAReview INSTANCE;
+
     public static synchronized IAReview getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new IAReview();
@@ -38,7 +39,7 @@ public class IAReview {
     ReviewManager manager;
     ReviewInfo reviewInfo;
 
-    public void showIAReview(Activity context){
+    public void showIAReview(Activity context) {
 
 
         manager = ReviewManagerFactory.create(context);
@@ -56,7 +57,7 @@ public class IAReview {
 
             } else {
                 // There was some problem, log or handle the error code.
-                Toast.makeText(context, ""+task.getException().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "" + task.getException().toString(), Toast.LENGTH_SHORT).show();
 
                 String reviewErrorCode = task.getException().toString();
             }
@@ -81,11 +82,11 @@ public class IAReview {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
                     }
-                },0);
+                }, 0);
             }
         });
 
-        View parentView = activity.getLayoutInflater().inflate(R.layout.dialog_feedback,null);
+        View parentView = activity.getLayoutInflater().inflate(R.layout.dialog_feedback, null);
         bottomSheerDialog.setContentView(parentView);
         bottomSheerDialog.show();
         TextView tvcount = parentView.findViewById(R.id.count);
@@ -103,7 +104,7 @@ public class IAReview {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvcount.setText(String.valueOf((s.length()))+ "/500");
+                tvcount.setText(String.valueOf((s.length())) + "/500");
 
             }
 
@@ -145,22 +146,19 @@ public class IAReview {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (body.getText().toString().length() <= 0){
-                    Toast.makeText(activity,"Feedback cannot be left blank", Toast.LENGTH_SHORT).show();
-
+                if (body.getText().toString().length() <= 0) {
+                    Toast.makeText(activity, "Feedback cannot be left blank", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 bottomSheerDialog.dismiss();
 
                 Intent selectorIntent = new Intent(Intent.ACTION_SENDTO);
                 selectorIntent.setData(Uri.parse("mailto:"));
-
                 final Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback App "+ name);
-                emailIntent.putExtra(Intent.EXTRA_TEXT   , ""+body.getText().toString());
-                emailIntent.setSelector( selectorIntent );
-
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback App " + name);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "" + body.getText().toString());
+                emailIntent.setSelector(selectorIntent);
                 activity.startActivity(Intent.createChooser(emailIntent, "Send email..."));
 
 

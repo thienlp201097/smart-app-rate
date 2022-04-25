@@ -1,6 +1,8 @@
 package com.codemybrainsout.rating;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -13,12 +15,19 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private RelativeLayout rlRate;
+    Button btnRate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        showDialogRate();
+        btnRate = findViewById(R.id.btnRate);
+        btnRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogRate();
+            }
+        });
     }
 
     private void showDialogRate() {
