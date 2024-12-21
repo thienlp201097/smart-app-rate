@@ -63,7 +63,7 @@ public class IAReview {
     }
 
 
-    void openDialogFeedback(Activity activity, String name, int logo, String email, int starnumber) {
+    void openDialogFeedback(Activity activity, String name, int logo, String email, int starnumber, String app_version, String sdk_version, String device_name) {
 //        activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         BottomSheetDialog bottomSheerDialog = new BottomSheetDialog(activity, R.style.DialogStyle);
@@ -154,7 +154,7 @@ public class IAReview {
                 selectorIntent.setData(Uri.parse("mailto:"));
                 final Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback App " + name);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback App " + name + " | " + app_version + " | " + sdk_version + " | " + device_name);
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "" + body.getText().toString());
                 emailIntent.setSelector(selectorIntent);
                 activity.startActivity(Intent.createChooser(emailIntent, "Send email..."));

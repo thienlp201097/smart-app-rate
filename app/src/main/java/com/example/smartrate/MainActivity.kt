@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
             .setNameApp(getString(R.string.app_name))
             .setIcon(R.mipmap.ic_launcher)
             .setEmail("vapp.helpcenter@gmail.com")
+            .setDeviceInfo("1.0.1","34","Xiaomi")
             .isShowButtonLater(true)
             .isClickLaterDismiss(true)
             .setOnlickRate { rate ->

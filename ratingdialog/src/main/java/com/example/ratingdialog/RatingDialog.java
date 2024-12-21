@@ -134,7 +134,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
                 builder.rateButtonCallback.onClick(starnumber);
                 if (starnumber <= 3) {
                     dismiss();
-                    IAReview.getInstance().openDialogFeedback(context, builder.appName, builder.logo, builder.email, starnumber);
+                    IAReview.getInstance().openDialogFeedback(context, builder.appName, builder.logo, builder.email, starnumber, builder.app_version, builder.sdk_version, builder.name_device);
                 } else {
                     dismiss();
                     sharedpreferences = context.getSharedPreferences(MyPrefs, Context.MODE_PRIVATE);
@@ -199,7 +199,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
                 starnumber = b;
                 switch (b) {
                     case 0:
-                        tvTitle.setText("We are working hard for a better user eperience.");
+                        tvTitle.setText("Oh, no!");
                         tvContent.setText("We’d greatly appreciate if you can rate us.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_0));
                         break;
@@ -443,6 +443,9 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         private int logo;
         private String appName;
         private String email;
+        private String app_version;
+        private String sdk_version;
+        private String name_device;
         private MaybeLaterCallback maybeLaterCallback;
         private RateButtonCallback rateButtonCallback;
 
@@ -598,6 +601,13 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
         public Builder setEmail(String email) {
             this.email = email;
+            return this;
+        }
+
+        public Builder setDeviceInfo(String app_version,String sdk_version,String name_device) {
+            this.app_version = app_version;
+            this.sdk_version = sdk_version;
+            this.name_device = name_device;
             return this;
         }
 
