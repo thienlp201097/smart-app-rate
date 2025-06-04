@@ -20,8 +20,13 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
         showDialogRate()
     }
+
     private fun showDialogRate() {
         val ratingDialog: RatingDialog = RatingDialog.Builder(this)
             .session(1)
@@ -47,9 +52,8 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-            .ratingButtonColor(R.color.black)
+            .ratingButtonColor(R.drawable.bg_button_rate)
             .build()
-
         //Cancel On Touch Outside
         ratingDialog.setCanceledOnTouchOutside(false)
         //show

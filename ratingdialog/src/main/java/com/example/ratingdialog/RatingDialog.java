@@ -24,6 +24,7 @@ import androidx.core.content.ContextCompat;
 
 import com.willy.ratingbar.BaseRatingBar;
 import com.willy.ratingbar.RotationRatingBar;
+import com.willy.ratingbar.ScaleRatingBar;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -42,19 +43,19 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
     private static final String RATED = "rated";
     private static final String DATE_FIRST = "date_count";
     private static final String SHOW_NEVER = "show_never";
-    private String MyPrefs = "RatingDialog";
+    private final String MyPrefs = "RatingDialog";
     private SharedPreferences sharedpreferences;
-    private Activity context;
-    private Builder builder;
+    private final Activity context;
+    private final Builder builder;
     private TextView tvTitle, tvContent, tvNegative, tvPositive;
-    private RotationRatingBar ratingBar;
+    private ScaleRatingBar ratingBar;
     private ImageView ivIcon;
     private LinearLayout ratingButtons;
     Button btnRate;
     TextView btnLate;
-    private float threshold;
-    private int session;
-    private int date;
+    private final float threshold;
+    private final int session;
+    private final int date;
     private boolean ignoreRated = false;
     private boolean thresholdPassed = true;
     public int starnumber = 0;
@@ -80,25 +81,20 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         setContentView(R.layout.dialog_rating);
 
-        tvTitle = (TextView) findViewById(R.id.dialog_rating_title);
-        tvContent = (TextView) findViewById(R.id.dialog_rating_content);
-        tvNegative = (TextView) findViewById(R.id.dialog_rating_button_negative);
-        tvPositive = (TextView) findViewById(R.id.dialog_rating_button_positive);
-        ratingBar = (RotationRatingBar) findViewById(R.id.dialog_rating_rating_bar);
-        ivIcon = (ImageView) findViewById(R.id.dialog_rating_icon);
-        ratingButtons = (LinearLayout) findViewById(R.id.dialog_rating_buttons);
+        tvTitle = findViewById(R.id.dialog_rating_title);
+        tvContent = findViewById(R.id.dialog_rating_content);
+        tvNegative = findViewById(R.id.dialog_rating_button_negative);
+        tvPositive = findViewById(R.id.dialog_rating_button_positive);
+        ratingBar = findViewById(R.id.dialog_rating_rating_bar);
+        ivIcon = findViewById(R.id.dialog_rating_icon);
+        ratingButtons = findViewById(R.id.dialog_rating_buttons);
         btnRate = findViewById(R.id.btnRate);
         btnLate = findViewById(R.id.btnLate);
         init();
     }
 
     private void init() {
-
-        GradientDrawable drawable = (GradientDrawable) context.getResources()
-                .getDrawable(R.drawable.bg_button);
-        drawable.mutate();
-        drawable.setColor(builder.ratingBarBackgroundColor);
-        btnRate.setBackground(drawable);
+        btnRate.setBackgroundResource(builder.ratingBarBackgroundColor);
 
         btnRate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,19 +172,6 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             tvNegative.setBackgroundResource(builder.negativeBackgroundColor);
         }
 
-//        if (builder.ratingBarColor != 0) {
-//            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-//                LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-//                stars.getDrawable(2).setColorFilter(ContextCompat.getColor(context, builder.ratingBarColor), PorterDuff.Mode.SRC_ATOP);
-//                stars.getDrawable(1).setColorFilter(ContextCompat.getColor(context, builder.ratingBarColor), PorterDuff.Mode.SRC_ATOP);
-//                int ratingBarBackgroundColor = builder.ratingBarBackgroundColor != 0 ? builder.ratingBarBackgroundColor : R.color.grey_200;
-//                stars.getDrawable(0).setColorFilter(ContextCompat.getColor(context, ratingBarBackgroundColor), PorterDuff.Mode.SRC_ATOP);
-//            } else {
-//                Drawable stars = ratingBar.getProgressDrawable();
-//                DrawableCompat.setTint(stars, ContextCompat.getColor(context, builder.ratingBarColor));
-//            }
-//        }
-
         Drawable d = context.getPackageManager().getApplicationIcon(context.getApplicationInfo());
         //  ivIcon.setImageDrawable(builder.drawable != null ? builder.drawable : d);
 
@@ -199,35 +182,35 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
                 starnumber = b;
                 switch (b) {
                     case 0:
-                        tvTitle.setText("Oh, no!");
+                        tvTitle.setText("Making things better.");
                         tvContent.setText("We’d greatly appreciate if you can rate us.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_0));
                         break;
                     case 1:
-                        tvTitle.setText("Oh, no!");
-                        tvContent.setText("Please leave us some feedback");
+                        tvTitle.setText("We're sorry to hear that.");
+                        tvContent.setText("Your feedback helps us improve.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_1));
                         break;
 
                     case 2:
-                        tvTitle.setText("Oh, no!");
-                        tvContent.setText("Please leave us some feedback");
+                        tvTitle.setText("Thanks for your honesty.");
+                        tvContent.setText("We’re working to do better.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_2));
                         break;
 
                     case 3:
-                        tvTitle.setText("Oh, no!");
-                        tvContent.setText("Please leave us some feedback");
+                        tvTitle.setText("Appreciate your feedback.");
+                        tvContent.setText("We'll keep improving from here.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_3));
                         break;
                     case 4:
-                        tvTitle.setText("We like you too!");
-                        tvContent.setText("Thank for your feedback.");
+                        tvTitle.setText("Glad you liked it!");
+                        tvContent.setText("We’ll make it even better.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_4));
                         break;
                     case 5:
-                        tvTitle.setText("We like you too!");
-                        tvContent.setText("Thank for your feedback.");
+                        tvTitle.setText("Thank you!");
+                        tvContent.setText("Your support means everything.");
                         ivIcon.setImageDrawable(context.getResources().getDrawable(R.drawable.rate_5));
                         break;
                     default:
@@ -341,7 +324,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
         return ivIcon;
     }
 
-    public RotationRatingBar getRatingBarView() {
+    public ScaleRatingBar getRatingBarView() {
         return ratingBar;
     }
 
@@ -366,11 +349,11 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
             sharedpreferences.edit().putBoolean("firstrun", false).commit();
 
             if (currentTime != null) {
-                sharedpreferences.edit().putString(DATE_FIRST, String.valueOf(currentTime)).commit();
+                sharedpreferences.edit().putString(DATE_FIRST, currentTime).commit();
             }
         }
 
-        String currentDate = sharedpreferences.getString(DATE_FIRST, String.valueOf(currentTime));
+        String currentDate = sharedpreferences.getString(DATE_FIRST, currentTime);
         DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 
         Date startDate = null;
@@ -385,7 +368,7 @@ public class RatingDialog extends AppCompatDialog implements RatingBar.OnRatingB
 
         Date endDate = null;
         try {
-            endDate = df.parse(String.valueOf(currentTime));
+            endDate = df.parse(currentTime);
 //            endDate = df.parse(String.valueOf("03/09/2021"));
             String newDateString = df.format(endDate);
             System.out.println(newDateString);
