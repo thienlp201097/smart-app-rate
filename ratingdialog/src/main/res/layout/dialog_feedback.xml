@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:background="@drawable/rounded_rectangle"
+        android:background="@drawable/rounded_rectangle_smart_rate00001"
         android:orientation="vertical">
         <View
             android:layout_width="match_parent"
